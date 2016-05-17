@@ -37,6 +37,30 @@ public final class Reservation {
         }
         return newID;
     }
+    
+    public static boolean isAllBooked() throws SQLException{
+        Statement stmt = conn.createStatement();
+        boolean db_status;
+
+        try {
+            ResultSet rs = stmt.executeQuery("SELECT SEAT_NO FROM SEAT WHERE RESERVED is NULL AND BOOKED is NULL AND ROWNUM = 1");
+            if (rs.next()) {
+                String seatNumber = rs.getString("SEAT_NO");
+                if(seatNumber == "" || seatNumber == null){
+                    db_status = false;
+                }
+                db_status = false;
+            } else {db_status = true;}
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
+            db_status = true;
+        } finally {
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
+        return db_status;
+    }
 
     public Connection createConn(String user, String pw) throws SQLException {
         Connection connection = null;
@@ -90,7 +114,7 @@ public final class Reservation {
                 if (rs.getObject("RESERVED") == null) {
                     return -1;
                 }
-                if ((System.currentTimeMillis() - rs.getLong("BOOKING_TIME")) > 5000) {
+                if ((System.currentTimeMillis() - rs.getLong("BOOKING_TIME")) > 500000) { //5000
                     Statement update = conn.createStatement();
                     update.execute("UPDATE SEAT SET RESERVED = null WHERE SEAT_NO = '" + seat_no + "'");
                     update.close();

@@ -20,7 +20,7 @@ public class UserThread implements Runnable {
             int id = Reservation.generateId();
             String seatNumber = reserve("CR9", id);
             Thread.sleep((long) (Math.random() * 10000) + 1000);
-            if (new Random().nextInt(100) < 75) {
+            if (new Random().nextInt(100) < 99) { //75
                 System.out.println(Thread.currentThread().getName() + ": " + Reservation.book("CR9", seatNumber, id));
             } else {
                 System.out.println(Thread.currentThread().getName() + ": Canceled");
