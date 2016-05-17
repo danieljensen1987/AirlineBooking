@@ -91,6 +91,8 @@ public final class Reservation {
                     return -1;
                 }
                 if ((System.currentTimeMillis() - rs.getLong("BOOKING_TIME")) > 5000) {
+                    Statement update = conn.createStatement();
+                    update.execute("UPDATE SEAT SET RESERVED = null WHERE SEAT_NO = '" + seat_no + "'");
                     return -3;
                 }
                 if ((int) id == rs.getInt("RESERVED")) {
