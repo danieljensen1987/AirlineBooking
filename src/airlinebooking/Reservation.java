@@ -109,12 +109,12 @@ public final class Reservation {
                     return -2;
                 }
             } else {
-                AirlineBooking.db_full = true;
+                AirlineBooking.db_full.set(true);
                 return -5;
             }
         } catch (Exception e) {
             System.out.println("Exception: " + e.getMessage());
-            AirlineBooking.db_full = true;
+            AirlineBooking.db_full.set(true);
             return -5;
         } finally {
             if (stmt != null) {
