@@ -6,15 +6,15 @@ import java.util.concurrent.Executors;
 
 public final class AirlineBooking {
     public static Stats stats;    
-
-    
+    public static boolean db_full = false;    
 
     public static void main(String[] args) throws SQLException {
-        Reservation r = new Reservation("cphdj74", "cphdj74");
+        Reservation r = new Reservation("cphjp154", "cphjp154");
         stats = new Stats(0, 0, 0, 0, 0);
 
         ExecutorService exe = Executors.newFixedThreadPool(10);
-        for (int i = 0; i < 100; i++) {
+        
+        for (int i = 0; !db_full; i++) {
             Runnable user = new UserThread("" + i);
             exe.execute(user);
         }

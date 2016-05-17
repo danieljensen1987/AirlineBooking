@@ -93,6 +93,8 @@ public final class Reservation {
                 if ((System.currentTimeMillis() - rs.getLong("BOOKING_TIME")) > 5000) {
                     Statement update = conn.createStatement();
                     update.execute("UPDATE SEAT SET RESERVED = null WHERE SEAT_NO = '" + seat_no + "'");
+                    update.close();
+                    Stats.setIncorrectBookings();
                     return -3;
                 }
                 if ((int) id == rs.getInt("RESERVED")) {
@@ -107,10 +109,12 @@ public final class Reservation {
                     return -2;
                 }
             } else {
+                AirlineBooking.db_full = true;
                 return -5;
             }
         } catch (Exception e) {
             System.out.println("Exception: " + e.getMessage());
+            AirlineBooking.db_full = true;
             return -5;
         } finally {
             if (stmt != null) {

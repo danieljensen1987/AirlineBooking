@@ -1,6 +1,8 @@
 package airlinebooking;
 
+import static airlinebooking.Reservation.conn;
 import static airlinebooking.Reservation.reserve;
+import java.sql.Statement;
 import java.util.Random;
 
 public class UserThread implements Runnable {
@@ -22,8 +24,11 @@ public class UserThread implements Runnable {
                 System.out.println(Thread.currentThread().getName() + ": " + Reservation.book("CR9", seatNumber, id));
             } else {
                 System.out.println(Thread.currentThread().getName() + ": Canceled");
+                Statement update = conn.createStatement();
+                update.execute("UPDATE SEAT SET RESERVED = null WHERE SEAT_NO = '" + seatNumber + "'");
+                update.close();
+                Stats.setIncorrectBookings();
             }
-
         } catch (Exception e) {
         }
     }
