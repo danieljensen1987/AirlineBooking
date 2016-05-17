@@ -14,21 +14,23 @@ public final class AirlineBooking {
         Reservation r = new Reservation("cphjp154", "cphjp154");
         stats = new Stats(0, 0, 0, 0, 0);
 
-        while (!Reservation.isAllBooked()) {
+        while (true) {
             ExecutorService exe = Executors.newFixedThreadPool(10);
 
             for (int i = 0; i < 10; i++) {
-                if (!Reservation.isAllBooked()) {
-                    Runnable user = new UserThread("" + i);
-                    exe.execute(user);
-                }
+                Runnable user = new UserThread("" + i);
+                exe.execute(user);
+
             }
 
             exe.shutdown();
             while (!exe.isTerminated()) {
             }
-            System.out.println("DB full: " + !Reservation.isAllBooked());
-            if(Reservation.isAllBooked()){ System.out.println("ABANDON SHIP"); break;}
+            System.out.println("DB full: " + Reservation.isAllBooked());
+            if (Reservation.isAllBooked()) {
+                System.out.println("ABANDON SHIP");
+                break;
+            }
         }
 
         System.out.println("All done!");
